@@ -1,0 +1,18 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "Load-Balanced adaptive mesh refinement"
+
+theme = "reveal-hugo"
+
+
+[markup.goldmark.renderer]
+unsafe = true
+[outputFormats.Reveal]
+baseName = "index"
+mediaType = "text/html"
+isHTML = true
+
+[params.reveal_hugo]
+highlight_theme = "dracula"
+custom_css = "/stylesheets/custom.css"
+width = "1200"
