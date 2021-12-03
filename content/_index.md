@@ -496,7 +496,7 @@ What Bulut Tekgul et al. did with **[DLBFoam](https://github.com/Aalto-CFD/DLBFo
 ---
 
 <p style="text-align: center;">An example of DLBFoam run with the Hex-based adaptive refinement engine (courtesy of Bulut)</p>
-<video style="scale:0.85; margin:0; padding:0;" data-autoplay src="/videos/dlbfoam.mp4"></video>
+<video style="scale:0.85; margin:0; padding:0;" data-autoplay src="videos/dlbfoam.mp4"></video>
 
 ---
 
