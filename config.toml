@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "https://foamScience.github.io/amr-lb"
 languageCode = "en-us"
 title = "Load-Balanced adaptive mesh refinement"
 

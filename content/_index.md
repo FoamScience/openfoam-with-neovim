@@ -21,7 +21,7 @@ Mohammed  Elwardi  Fadeli
 <div class="columns-container">
 
 <div class="col" style="width: 30%; float:left; padding: 60px;">
-<img data-src="/images/profile.png">
+<img data-src="images/profile.png">
 </div>
 
 <div style="flex: 2;">
@@ -180,7 +180,7 @@ Mohammed  Elwardi  Fadeli
 {{< slide background-color="white" >}}
 ### Interface-tracking refinement <br>(15k cells, initial mesh: 8.5k)
 
-<img style="width:90%; margin:0; padding:0; position-top: 0;" data-src="/images/alpha1.png">
+<img style="width:90%; margin:0; padding:0; position-top: 0;" data-src="images/alpha1.png">
 
 
 ---
@@ -370,15 +370,15 @@ There is also support for ”**mounting**” these criteria on top of each other
 ### Multi-Criteria Refinement process (per timeStep)
 
 <section data-transition="fade-out">
-    <img style="scale:0.85;" data-src="/images/17.png">
+    <img style="scale:0.85;" data-src="images/17.png">
 </section>
 
 <section data-transition="fade-in fade-out">
-    <img style="scale:0.85;" data-src="/images/18.png">
+    <img style="scale:0.85;" data-src="images/18.png">
 </section>
 
 <section data-transition="fade-in fade-out">
-    <img style="scale:0.85;" data-src="/images/19.png">
+    <img style="scale:0.85;" data-src="images/19.png">
 </section>
 
 ---
@@ -446,7 +446,7 @@ $(document).ready(function() {
 });
 </script>
 
-<div id="my-interactive-image" style='margin: auto; width: 800px; height: 463px; border-radius: 8px; background-size: cover; background-image: url("/images/levels.png");'></div>
+<div id="my-interactive-image" style='margin: auto; width: 800px; height: 463px; border-radius: 8px; background-size: cover; background-image: url("images/levels.png");'></div>
 
 ---
 
