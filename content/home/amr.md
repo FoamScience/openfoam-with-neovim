@@ -36,7 +36,7 @@ weight = 3
 <h3> Geometric Multi-grid methods vs. AMR</h3>
 <div class="tikz">
 <script type="text/tikz">
-\begin{tikzpicture}[every node/.style={scale=0.5}]
+\begin{tikzpicture}[every node/.style={scale=2.5}]
     \usetikzlibrary{positioning}
     \begin{scope}[
             yshift=-83,every node/.append style={
@@ -95,11 +95,11 @@ weight = 3
     \end{scope}
     	
 
-    \draw[-latex,thick,draw=green!50!black](5.8,-.3) node[right,color=white]{Fine\hspace{3cm}mesh}
+    \draw[-latex,thick,draw=green!50!black](5.8,-.3) node[right,color=white]{Fine mesh}
         to[out=180,in=90] (3.9,-1);
-    \draw[-latex,thick,draw=green!50!black] (6.2,2) node[right,color=white]{Finer\hspace{4.5cm}mesh}
+    \draw[-latex,thick,draw=green!50!black] (6.2,2) node[right,color=white]{Finer mesh}
          to[out=180,in=90] (4,2);
-    \draw[-latex,thick,draw=green!50!black](5.9,5) node[right,color=white] (coarse) {Coarse\hspace{5cm}mesh}
+    \draw[-latex,thick,draw=green!50!black](5.9,5) node[right,color=white] (coarse) {Coarse mesh}
         to[out=180,in=90] (3.6,5);
     \draw[-latex,thick,draw=green!50!black](11.2,5) to[out=0,in=90] (14,5);
     \draw[-latex,thick,draw=green!50!black](10.2,-.3) to[out=0,in=90] (14,-1);
@@ -267,7 +267,7 @@ There is also support for ”**mounting**” these criteria on top of each other
 <span class="hljs-type">refineBasedOnResiduals</span>
 <span class="hljs-punctuation">{</span>
     <span class="hljs-title">refineInterval</span>   <span class="hljs-number">1</span><span class="hljs-punctuation">;</span>
-    <span class="hljs-title">unrefineInterval</span> <span class="hljs-number">1</span><span class="hljs-punctuation">;</span>
+    <span class="hljs-title">unrefineInterval</span> <span class="hljs-number">10</span><span class="hljs-punctuation">;</span>
     <span class="hljs-title">maxRefinementLevel</span>   <span class="hljs-number">1</span><span class="hljs-punctuation">;</span>
     <span class="hljs-title">separateUpdates</span> <span class="hljs-keyword">false</span><span class="hljs-punctuation">;</span>
 
@@ -296,7 +296,7 @@ There is also support for ”**mounting**” these criteria on top of each other
 
         <span class="hljs-title">code</span>
         <span class="hljs-punctuation">#{</span>
-            // Return immediately if 1st timeStep,
+            // Return immediately if 1st timeStep
             if (mesh().time().timeIndex() <= 1)
             {
                 return labelList().xfer();
@@ -318,7 +318,7 @@ There is also support for ”**mounting**” these criteria on top of each other
             volScalarField magResError = mag(ee.error());
             scalar maxResErr = gMax(magResError);
             field_.internalField() = magResError.internalField();   
-            lowerBound_ = 0.8 * maxResErr;
+            lowerBound_ = 3*magResError.weightedAverage(mesh().V()).value();
             upperBound_ = maxResErr;
 <span class="hljs-punctuation">        #}</span><span class="hljs-punctuation">;</span>
     <span class="hljs-punctuation">}</span>
@@ -328,19 +328,27 @@ There is also support for ”**mounting**” these criteria on top of each other
 ---
 
 {{< slide background-color="white" >}}
+### Residuals-driven refinement
+
+<video style="display:block; margin:0 auto; padding:0;" data-autoplay src="videos/residuals.webm"></video>
+
+---
+
+{{< slide background-color="white" >}}
 
 ### Multi-Criteria Refinement process (per timeStep)
 
+
 <section data-transition="fade-out">
-    <img style="scale:0.8;" data-src="images/17.png">
+    <img style="width:75%;" data-src="images/17.png">
 </section>
 
 <section data-transition="fade-in fade-out">
-    <img style="scale:0.8;" data-src="images/18.png">
+    <img style="width:75%;" data-src="images/18.png">
 </section>
 
 <section data-transition="fade-in fade-out">
-    <img style="scale:0.8;" data-src="images/19.png">
+    <img style="width:75%;" data-src="images/19.png">
 </section>
 
 ---
