@@ -13,6 +13,6 @@ mediaType = "text/html"
 isHTML = true
 
 [params.reveal_hugo]
-highlight_theme = "dracula"
-custom_css = "/stylesheets/custom.css"
+highlight_theme = "a11y-light"
+custom_css = "css/customized.css"
 width = "1200"
