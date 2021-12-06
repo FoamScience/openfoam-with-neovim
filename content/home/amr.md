@@ -4,7 +4,7 @@ weight = 3
 
 {{< slide background-image="images/bg-amr.png" >}}
 
-# Native Adaptive Mesh Refinement
+# Adaptive Mesh Refinement
 
 
 ---
@@ -14,26 +14,26 @@ weight = 3
 <section data-markdown>
 <script type="text/template">
 
-- **Dynamically** densify the mesh in regions of interest (only) to increase solution accuracy
-    - Uniformly fine meshes are usually expensive <!-- .element: class="fragment" data-fragment-index="2"  style="font-size: 0.8em;"-->
-- Coarsen the mesh in other regions to save computation time <!-- .element: class="fragment" data-fragment-index="3" -->
-    - Regions where no critical flow features are developing <!-- .element: class="fragment" data-fragment-index="3"  style="font-size: 0.8em;"-->
+- **Dynamically** increase mesh resolution where needed, i.e. in moving regions of interest (locally maintain accuracy)
+- Coarsen the mesh in smooth flow regions to save computation time but preserving local accuracy<!-- .element: class="fragment" data-fragment-index="3" -->
+    * Uniformly fine meshes are usually too expensive <!-- .element: class="fragment" data-fragment-index="3"  style="font-size: 0.8em;"-->
+    * Regions where no critical/fine flow features are developing <!-- .element: class="fragment" data-fragment-index="3"  style="font-size: 0.8em;"-->
 </script>
 </section>
 
 ---
 
-- AMR Has potential for local (cheap) accuracy increase:
+- AMR Has potential for local (computationally cheap) accuracy increase:
     1. Start solving on coarse meshes
-    2. Compute discretization errors
+    2. Compute discretization or residual errors
     3. Refine where errors are high
-    4. Repeat 1-3 until errors fall under a certain tolerance value
+    4. Repeat steps 1-3 until errors fall under a certain tolerance
     5. Pass to the next time step
 
 ---
 
 <section data-noproecess>
-<h3> Geometric Multi-grid methods vs. AMR</h3>
+<h3> GMG methods vs. AMR</h3>
 <div class="tikz">
 <script type="text/tikz">
 \begin{tikzpicture}[every node/.style={scale=2.5}]
@@ -120,9 +120,9 @@ weight = 3
 
 ## What's already available?
 
-- OpenFOAM has a mature [Hex-based adaptive refinement engine](https://github.com/OpenFOAM/OpenFOAM-dev/tree/master/src/dynamicMesh/polyTopoChange/polyTopoChange/hexRef8)
-- Professors Jasak & Vuko have laid the foundation for polyhedral adaptive refinement
-  in Foam-Extend 4, [nextRelease branch](https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-4.0/tree/nextRelease/src/dynamicMesh/topoChangerFvMesh/dynamicPolyRefinementFvMesh)
+- OpenFOAM has a mature [hex-based adaptive mesh refinement engine](https://github.com/OpenFOAM/OpenFOAM-dev/tree/master/src/dynamicMesh/polyTopoChange/polyTopoChange/hexRef8), which has been enhanced by load-balancing in Darmstadt ([DOI: 10.1016/j.softx.2019.100317](https://doi.org/10.1016/j.softx.2019.100317))
+- Foundation of polyhedral adaptive refinement
+  in Foam-Extend 4, [nextRelease branch](https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-4.0/tree/nextRelease/src/dynamicMesh/topoChangerFvMesh/dynamicPolyRefinementFvMesh) ([DOI: 10.4271/2019-24-0128](https://doi.org/10.4271/2019-24-0128))
 
 ---
 
@@ -131,24 +131,25 @@ weight = 3
 - Native multi-criteria refinement & unrefinement for polyhedral meshes
     - Built on top of Foam-Extend's engine
     - With support for cell-count based Load Balancing
+    - Multiple interface refinement selection criteria, e.g. interface/front criterion
 
 ---
 
 {{< slide background-color="white" >}}
-### Interface-tracking refinement
+### Interface-Capturing refinement
 
 <video style="display:block; margin:0 auto; padding:0;" data-autoplay src="videos/interface.webm"></video>
 
 ---
 
 {{< slide background-color="white" >}}
-### Interface-tracking refinement <br>(Uniformly fine mesh: +51k)
+### Interface-Capturing refinement <br>(Uniformly fine mesh: +51k)
 
 <img style="width:85%; margin:0; padding:0; position-top: 0;" data-src="images/cell_count.png">
 
 ---
 
-<p style="text-align:center;">Interface-tracking refinement</p>
+<p style="text-align:center;">Interface-Capturing refinement</p>
 
 <section data-auto-animate data-auto-animate-unmatched="false">
 {{< foamCode "1-3,5,7" >}}
@@ -249,15 +250,12 @@ weight = 3
 
 ### More refinement/unrefinement criteria
 
-In addition to the interface refinement criterion, we can track:
-- The discretisation error
-- Interesting ranges of field _values, gradient_ and/or _curl_
+In addition to the interface refinement criterion, we have developed:
+- Error-driven refinement selection criteria
+    - local residual error estimate
+    - local discretisation error estimate
+- further field-based refinement selection criteria: _values, gradient_ and/or _curl_
 - User-supplied (dynamic) code for refinement selection
-
----
-
-There is also support for ”**mounting**” these criteria on top of each other
-- Unrefinement won’t interfere with the refined (and to-be refined) cells in the same timeStep
 
 ---
 
