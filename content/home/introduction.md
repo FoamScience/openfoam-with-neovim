@@ -15,8 +15,8 @@ weight = 2
 <script type="text/template">
 
 - Msc. in Petroleum Engineering <!-- .element: style="font-size: 0.8em;" -->
-- Maintainer of an OpenFOAM-based Reservoir Engineering Toolkit (OpenRSR) <!-- .element: class="fragment" data-fragment-index="2"  style="font-size: 0.8em;"-->
-  - Which provides coupled solvers for Black-Oil Equations <!-- .element: class="fragment" data-fragment-index="2"  style="font-size: 0.7em;"-->
+- Maintainer of an OpenFOAM-based Reservoir Engineering Toolkit (OpenRSR, <!-- .element: class="fragment" data-fragment-index="2"  style="font-size: 0.8em;"-->
+  providing coupled solvers for Black-Oil Equations) <!-- .element: class="fragment" data-fragment-index="2"  style="font-size: 0.7em;"-->
 - LFCE-certified (Linux Engineer) who likes frictions with Math problems <!-- .element: class="fragment" data-fragment-index="3"  style="font-size: 0.8em;"-->
 </script>
 </section>
@@ -26,8 +26,12 @@ weight = 2
 
 ---
 
-### We'll be discussing ...
+### Outline
 
-1. Adaptive Polyhedral Mesh Refinement
-2. Dynamic Load-balancing applied to chemistry and AMR
+#### Unified Dynamic Load-Balancing (DLB) Framework for rCFD
+
+1. Current Status:
+  * Transport equations: DLB and adaptive polyhedral mesh refinement
+  * Chemistry: DLB applied to chemical source terms (DLBFoam)
+2. Future Steps
 
