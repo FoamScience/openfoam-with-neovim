@@ -16,3 +16,6 @@ isHTML = true
 highlight_theme = "a11y-light"
 custom_css = "css/customized.css"
 width = "1200"
+
+[markup.highlight]
+codeFences = false

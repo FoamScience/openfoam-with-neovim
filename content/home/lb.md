@@ -58,3 +58,37 @@ What Bulut Tekgul et al. did with **[DLBFoam](https://github.com/Aalto-CFD/DLBFo
 
 <p style="text-align: center;">An example of DLBFoam run with the Hex-based adaptive refinement engine (courtesy of Bulut)</p>
 <video style="scale:0.85; display:block; margin:0 auto; padding:0;" data-autoplay src="videos/dlbfoam.webm"></video>
+
+---
+
+### Load-Balancing for particle simulations
+
+A simplistic approach was adopted in [mdFoam+](https://www.sciencedirect.com/science/article/pii/S0010465517303363)
+by S.M. Longshaw et al. to balance particles count
+
+```cpp{7-8|10,13,15|21-22}
+if ( Pstream::parRun() )
+{
+    const scalar& allowableImbalance = maxImbalance_;
+        
+    //First determine current level of imbalance - do this for all
+    // parallel runs, even if balancing is disabled
+    scalar nGlobalParticles = cloud_.size();
+    Foam::reduce(nGlobalParticles, sumOp<scalar>());
+    
+    scalar idealNParticles = scalar(nGlobalParticles)/scalar(Pstream::nProcs());
+    
+    scalar nParticles = cloud_.size();
+    scalar localImbalance = mag(nParticles - idealNParticles);
+    Foam::reduce(localImbalance, maxOp<scalar>());
+    scalar maxImbalance = localImbalance/idealNParticles;
+    
+    Info << "    Maximum imbalance = " << 100*maxImbalance << "%" << endl;
+    
+    if( maxImbalance > allowableImbalance && enableBalancing_)
+    {   
+        // Call reconstructPar and decomposeDSMCLoadBalancePar 
+        // on master
+    }
+}
+```

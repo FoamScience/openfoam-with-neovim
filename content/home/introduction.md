@@ -29,5 +29,5 @@ weight = 2
 ### We'll be discussing ...
 
 1. Adaptive Polyhedral Mesh Refinement
-2. Dynamic Load-balancing applied to chemistry and AMR
+2. Dynamic Load-balancing applied to chemistry, particles and AMR
 

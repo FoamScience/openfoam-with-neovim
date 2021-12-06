@@ -256,11 +256,6 @@ In addition to the interface refinement criterion, we can track:
 
 ---
 
-There is also support for ”**mounting**” these criteria on top of each other
-- Unrefinement won’t interfere with the refined (and to-be refined) cells in the same timeStep
-
----
-
 ### User-supplied code for refinement selection
 
 {{< foamCode "1-6|9-15|17-29|31-43|45-51|54-56" >}}
