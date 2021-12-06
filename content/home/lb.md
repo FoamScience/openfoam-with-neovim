@@ -10,12 +10,10 @@ weight = 4
 
 ### Load-Balance the mesh after topology changes
 
-- Refinement methods generally "unbalance" local regions,
-  generating load balancing issues.
+- Refinement methods generally cause imbalance for static domain decomposition cases.
 
 - The Load-Balancer engine in Foam-Extend can auto-sense processor
   imbalance with respect to cell-count
-    - Using a trigger coefficient
 
 - It also tries to migrates adjacent cells between processors if possible
 
@@ -46,15 +44,15 @@ weight = 4
 
 
 ---
-### Load Balance chemistry problems
+### Load-Balanced Chemistry
 
-What Bulut Tekgul et al. did with **[DLBFoam](https://github.com/Aalto-CFD/DLBFoam)**:
+What Bulut Tekgul et al. have achieved with **[DLBFoam](https://github.com/Aalto-CFD/DLBFoam)**:
 
-- Load balance the number of **Chemistry ODE problems** across processes
+- Load balance the number of **Chemistry ODE problems** across processes ([DOI: 10.1016/j.cpc.2021.108073](https://doi.org/10.1016/j.cpc.2021.108073))
     - Solved independently during each CFD iteration
-- Employ reference solution mapping to (thermo-chemically) similar cells
+    - Employ reference solution mapping to (thermo-chemically) similar cells
 
 ---
 
-<p style="text-align: center;">An example of DLBFoam run with the Hex-based adaptive refinement engine (courtesy of Bulut)</p>
+<p style="text-align: center;">An example of DLBFoam run with the Hex-based adaptive refinement engine (courtesy of Bulut, Argonne National Labs)</p>
 <video style="scale:0.85; display:block; margin:0 auto; padding:0;" data-autoplay src="videos/dlbfoam.webm"></video>
