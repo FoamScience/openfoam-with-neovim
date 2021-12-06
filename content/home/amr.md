@@ -250,12 +250,17 @@ weight = 3
 
 ### More refinement/unrefinement criteria
 
+<div style="height=1em" />
+<section data-markdown>
+<script type="text/template">
 In addition to the interface refinement criterion, we have developed:
-- Error-driven refinement selection criteria
-    - local residual error estimate
-    - local discretisation error estimate
-- further field-based refinement selection criteria: _values, gradient_ and/or _curl_
-- User-supplied (dynamic) code for refinement selection
+- Error-driven refinement selection criteria <!-- .element: style="font-size: 0.9em;"-->
+    - local residual error estimate<!-- .element: style="font-size: 0.8em;"-->
+    - local discretisation error estimate<!-- .element: style="font-size: 0.8em;"-->
+- further field-based refinement selection criteria: _values, gradient_ and/or _curl_<!-- .element: style="font-size: 0.9em;"-->
+- User-supplied (dynamic) code for refinement selection<!-- .element: style="font-size: 0.9em;"-->
+</script>
+</section>
 
 ---
 
