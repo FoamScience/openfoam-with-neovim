@@ -28,7 +28,7 @@ weight = 4
     <span class="hljs-title">method</span>          hierarchical<span class="hljs-punctuation">;</span>
     <span class="hljs-type">hierarchicalCoeffs</span>
     <span class="hljs-punctuation">{</span>
-        <span class="hljs-title">n</span>       <span class="hljs-punctuation">(</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-punctuation">)</span><span class="hljs-punctuation">;</span>
+        <span class="hljs-title">n</span>       <span class="hljs-punctuation">(</span> <span class="hljs-number">2</span> <span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-punctuation">)</span><span class="hljs-punctuation">;</span>
         <span class="hljs-title">delta</span>   <span class="hljs-number">0.001</span><span class="hljs-punctuation">;</span>
         <span class="hljs-title">order</span>   xyz<span class="hljs-punctuation">;</span>
     <span class="hljs-punctuation">}</span>
@@ -40,7 +40,7 @@ weight = 4
 {{< slide background-color="white" >}}
 ### Dynamically load-balance after AMR operations
 
-<video style="display:block; margin:0 auto; padding:0;" data-autoplay src="videos/loadbalance.webm"></video>
+<video style="display:block; width:85%; margin:0 auto; padding:0;" data-autoplay src="videos/loadbalance.webm"></video>
 
 
 ---
