@@ -1,6 +1,6 @@
-baseURL = "https://foamscience.github.io/amr-lb/"
+baseURL = "https://foamscience.github.io/openfoam-with-neovim/"
 languageCode = "en-us"
-title = "Load-Balanced adaptive mesh refinement"
+title = "Editing OpenFOAM cases with (Neo)VIM"
 
 theme = "reveal-hugo"
 
