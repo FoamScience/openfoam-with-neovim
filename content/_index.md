@@ -56,7 +56,7 @@ with OpenFOAM case files!
 
 How is the file type detected?
 
-- The plugin is [doing its best](https://github.com/FoamScience/nvim-treesitter/blob/master/after/ftdetect/foam.vim) for common OpenFOAM file names
+- The plugin is [doing its best](https://github.com/nvim-treesitter/nvim-treesitter/blob/master/after/ftdetect/foam.vim) for common OpenFOAM file names
 - But It's recommended to add (in your `after/ftdetect/foam.vim` for example):
 
 ```vim
@@ -227,7 +227,7 @@ ts_config.setup {
 
 <section data-markdown>
 <script type="text/template">
-- Install the [nvim-treesitter-context](https://github.com/FoamScience/nvim-treesitter-context/) plugin
+- Install the [nvim-treesitter-context](https://github.com/romgrk/nvim-treesitter-context) plugin
 - Shows you the current dictionary or key-value pair 
   - Only if it's long enough to span over multiple screen pages
 </script>
