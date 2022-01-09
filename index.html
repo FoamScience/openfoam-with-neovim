@@ -1,0 +1,396 @@
+<!doctype html><html lang=en>
+<head>
+<meta name=generator content="Hugo 0.91.2">
+<meta charset=utf-8>
+<title>Editing OpenFOAM cases with (Neo)VIM</title>
+<meta name=apple-mobile-web-app-capable content="yes">
+<meta name=apple-mobile-web-app-status-bar-style content="black-translucent">
+<link rel=preconnect href=https://fonts.googleapis.com>
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400&family=Fira+Sans&display=swap" rel=stylesheet>
+<link rel=stylesheet href=/openfoam-with-neovim/reveal-js/reset.css>
+<link rel=stylesheet href=/openfoam-with-neovim/reveal-js/reveal.css><link rel=stylesheet href=/openfoam-with-neovim/reveal-js/theme/black.css id=theme>
+<link rel=stylesheet href=/openfoam-with-neovim/highlight-js/a11y-light.min.css><link rel=stylesheet href=/openfoam-with-neovim/css/customized.css id=custom_css>
+</head>
+<body>
+<div class=reveal>
+<div class=slides>
+<section><h2 id=no-ide-no-headachebrneovim-for-the-lazy-foamer>No IDE no headache;<br>(Neo)VIM for the lazy Foamer</h2>
+<div style=height:10%></div>
+</section><section>
+<h3 id=the-stable-stuff>The stable stuff!</h3>
+<p>We&rsquo;ll walk you through setting up your NeoVIM to work <strong><em>more</em> effectively</strong>
+with OpenFOAM case files!</p>
+<ul>
+<li>Here is an example <a href=https://github.com/FoamScience/openfoam-nvim>NeoVim config</a>.</li>
+<li>There is also a <code>foamscience/foam-language-server:latest</code> Docker image which has all required software.</li>
+</ul>
+</section><section>
+<h5 id=stable-features>Stable features</h5>
+<ol>
+<li>Fast and fault-tolerant syntax highlighting using <a href=https://github.com/FoamScience/tree-sitter-foam>TreeSitter grammar</a>
+<ul>
+<li>Native handling of C++ code blocks</li>
+</ul>
+</li>
+<li>Hustle-free folding</li>
+<li>Syntax-aware text objects</li>
+<li>Smart syntax-aware text subjects</li>
+<li>Context display</li>
+</ol>
+</section><section>
+<h4 id=notes-to-remember>Notes to remember</h4>
+<ul>
+<li>
+<p>Every feature has a demo, make sure to scroll down to view it</p>
+</li>
+<li>
+<p>NeoVIM-specific technology is used here but everything
+is easy to replicate in other editors, or even with (Neo)VIM using other plugins</p>
+</li>
+<li>
+<p>You need at least <a href=https://github.com/neovim/neovim/releases>NeoVim 0.6.0+</a></p>
+</li>
+</ul>
+</section><section>
+<h2 id=1-syntax-highlighting>1. Syntax highlighting</h2>
+<section data-markdown>
+<script type=text/template>
+- Install  the [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) plugin
+- In NeoVIM, go `:TSInstall foam`
+    - It pulls the [TreeSitter grammar](https://github.com/FoamScience/tree-sitter-foam)
+      for OpenFOAM and compiles it; That's all you need to do
+</script>
+</section>
+<section data-markdown>
+<script type=text/template>
+<p>How is the file type detected?</p>
+<ul>
+<li>The plugin is <a href="https://github.com/nvim-treesitter/nvim-treesitter/blob/master/after/ftdetect/foam.vim">doing its best</a> for common OpenFOAM file names</li>
+<li>But It&rsquo;s recommended to add (in your <code>after/ftdetect/foam.vim</code> for example):</li>
+</ul>
+<pre><code class="language-vim">autocmd BufNewFile,BufRead,BufEnter * call s:foamFile(expand(&quot;%&quot;))
+</code></pre>
+<p></script></p>
+</section>
+<section data-shortcode-section>
+<img style="width:90%;margin:8% 0 0;padding:0" data-src=images/syntax_highlighting_01.png>
+</section>
+</section><section>
+<h3 id=highlighting-c-code-blocks>Highlighting C++ code blocks</h3>
+<section data-markdown>
+<script type=text/template>
+- `:TSInstall cpp`
+    - The OpenFOAM grammar will send C++ bits to the C++ parser!
+    - If you `:TSInstall regex`, it will also highlight regular expressions!
+</script>
+</section>
+<section data-shortcode-section>
+<img style="width:90%;margin:8% 0 0;padding:0" data-src=images/syntax_highlighting_02.png>
+</section>
+</section><section>
+<h2 id=expression-based-folding>Expression-based folding</h2>
+<section data-markdown>
+<script type=text/template>
+- `:set foldmethod=expr`
+- `:set foldexpr=nvim_treesitter#foldexpr()`
+- That's it! Put these in auto-cmds if you want their behavior to
+  persistent (you might want to set `foldminlines`)
+</script>
+</section>
+<section data-shortcode-section>
+<img style="width:90%;margin:8% 0 0;padding:0" data-src=images/folding.png>
+</section>
+</section><section>
+<h2 id=syntax-aware-text-objects>Syntax-aware text objects</h2>
+<section data-markdown>
+<script type=text/template>
+- Install the [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects) plugin
+- Its default queries provide captures for:
+  - Inner and Outer Key-value pairs (called `@function.*`)
+  - Inner and Outer dictionaries (called `@class.*`)
+  - Single comment (`comment.inner`)
+  - What's between two comments (`comment.outer`)
+</script>
+</section>
+<section data-markdown>
+<script type=text/template>
+Configs for **selecting**, **moving** and **swapping** text objects:
+```lua
+local ts_config = require('nvim-treesitter.configs')
+ts_config.setup {
+  textobjects = {
+    select = {
+      	enable = true,
+      	lookahead = true,
+          -- iF and aF families for selecting text objects
+      	keymaps = {
+      		-- v keymaps are for key-values
+      	  	["av"] = "@function.outer",
+      	  	["iv"] = "@function.inner",
+  		    -- c keymaps are for dictionaries
+      	  	["ac"] = "@class.outer",
+      	  	["ic"] = "@class.inner",
+  		    -- k keymaps are for comments
+      	  	["ak"] = "@comment.outer",
+      	  	["ik"] = "@comment.inner",
+      	},
+    },
+    move = {
+      	enable = true,
+      	set_jumps = true,
+  	    -- Granular control over motions on key-values and dictionaries
+  	    -- if you want it
+      	goto_next_start = {
+      	  	["]m"] = "@function.outer",
+      	  	["]]"] = "@class.outer",
+      	},
+      	goto_next_end = {
+      	  	["]M"] = "@function.outer",
+      	  	["]["] = "@class.outer",
+      	},
+      	goto_previous_start = {
+      	  	["[m"] = "@function.outer",
+      	  	["[["] = "@class.outer",
+      	},
+      	goto_previous_end = {
+      	  	["[M"] = "@function.outer",
+      	  	["[]"] = "@class.outer",
+      	},
+    },
+  	swap = {
+  	  	enable = true,
+  	  	-- Swap parameters; ie. if a key-value has multiple values
+        -- and you want to swap them
+  	  	swap_next = {
+  	  	  	[",a"] = "@parameter.inner",
+  	  	},
+  	  	swap_previous = {
+  	  	  	[",A"] = "@parameter.inner",
+  	  	},
+  	},
+  },
+}
+```
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto" data-autoplay src=videos/textobjects.webm></video>
+</section>
+</section><section>
+<h2 id=smart-text-subjects>Smart Text subjects</h2>
+<section data-markdown>
+<script type=text/template>
+- Install the [nvim-treesitter-textsubjects](https://github.com/RRethy/nvim-treesitter-textsubjects) plugin
+- Allows for incremental and smart selection of:
+  - Parts of keyword values
+  - Key-value pairs and list elements
+  - Dictionary body 
+</script>
+</section>
+<section data-markdown>
+<script type=text/template>
+Sample configuration for smart text subjects
+```lua
+local ts_config = require('nvim-treesitter.configs')
+ts_config.setup {
+  textsubjects = {
+      enable = true,
+      keymaps = {
+  		-- Press v. inside a key-value or a comment (then . or ; repeatedly)
+          ['.'] = 'textsubjects-smart',
+  		-- Press v; to select surrounding dictionary
+          [';'] = 'textsubjects-container-outer',
+      }
+  },
+}
+```
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto" data-autoplay src=videos/textsubjects.webm></video>
+</section>
+</section><section>
+<h2 id=context-display>Context display</h2>
+<section data-markdown>
+<script type=text/template>
+- Install the [nvim-treesitter-context](https://github.com/romgrk/nvim-treesitter-context) plugin
+- Shows you the current dictionary or key-value pair 
+  - Only if it's long enough to span over multiple screen pages
+</script>
+</section>
+<section data-markdown>
+<script type=text/template>
+Set it up in the following way:
+```lua
+require("treesitter-context").setup({
+    throttle = true,
+    patterns = {
+        default = { 'function', 'class', 'method' },
+        foam = { '^dict$', '^key_value$' }
+    },
+    -- Make sure foam is treated with exact patterns
+    exact_patterns = { foam = true, }
+})
+```
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto;padding:0" data-autoplay src=videos/context-display.webm></video>
+</section>
+</section><section>
+<h3 id=the-unstable-stuff>The UNstable stuff!</h3>
+<blockquote>
+<p>LSP features are still under development; but kind of useful already.</p>
+</blockquote>
+<ul>
+<li>Expect frequent changes</li>
+<li>Here, we&rsquo;re using NeoVim&rsquo;s native LSP client</li>
+<li>The following works also with VS-Code through <a href=https://github.com/FoamScience/foam-language-client>this extension</a></li>
+</ul>
+</section><section>
+<h4 id=get-the-language-server-working>Get the language server working!</h4>
+<section data-markdown>
+<script type=text/template>
+1. Install [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+    - This is an interface to the native LSP client
+    - Which provides sane configuration for many language servers
+2. Install [williamboman/nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer)
+    - Seamless server installation (`:LspInstall foam`)
+</script>
+</section>
+<section data-markdown>
+<script type=text/template>
+- Dig around [init.vim#L145](https://github.com/FoamScience/openfoam-nvim/blob/e9a6a3a6c303a066eec541e4a1fac0260680ff87/init.vim#L145) for an example configuration with auto-completion and snippets support
+- `:LspInfo` should say:
+    - the client is attached with the correct file types
+    - the correct case directory (as `root dir`) is selected
+</script>
+</section>
+<section data-shortcode-section>
+<img style="width:90%;margin:8% 0 0;padding:0" data-src=images/lsp-info.png>
+</section>
+</section><section>
+<h4 id=before-showing-you-the-features>Before showing you the features</h4>
+<ul>
+<li>Please <a href=https://github.com/FoamScience/foam-language-server/issues>file bug reports</a> if any unwanted behavior is observed.</li>
+<li>Or even better, solve the issues, and PR!</li>
+<li>You&rsquo;re also welcome to <a href=https://github.com/FoamScience/foam-language-server/discussions>discuss</a>
+any suggestions or feature requests you/others might have.</li>
+<li>You probably have all the following commands mapped to some keys, find them with <code>:map</code></li>
+</ul>
+</section><section>
+<h3 id=auto-completion>Auto-Completion</h3>
+<section data-markdown>
+<script type=text/template>
+- Auto-Completing macro-expansion variables on '$'
+- Suggesting preprocessor-like directives on '#'
+- Suggesting common key-value pairs [Few basic ones for now]
+- Built-in snippets [Few basic ones for now]
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto;padding:0" data-autoplay src=videos/auto-complete.webm></video>
+</section>
+</section><section>
+<h3 id=jump-to-definition>Jump to definition</h3>
+<section data-markdown>
+<script type=text/template>
+- `:lua vim.lsp.buf.definition()` when the cursor is on a macro variable takes you to the __value__ of
+    its definition (the key-value pair where it's defined).
+- If you have it set up, "peek definition" will also work
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto;padding:0" data-autoplay src=videos/jump-definition.webm></video>
+</section>
+<section data-shortcode-section>
+<img style="width:70%;margin:8% 0 0;padding:0" data-src=images/peek_definition.png>
+</section>
+</section><section>
+<h3 id=hover-documentation>Hover documentation</h3>
+<section data-markdown>
+<script type=text/template>
+- `:lua vim.lsp.buf.hover()` shows local documentation for the keyword under the cursor.
+    - [A limited number of keywords is supported currently]
+</script>
+</section>
+<section data-shortcode-section>
+<img style="width:90%;margin:8% 0 0;padding:0" data-src=images/hover.png>
+</section>
+</section><section>
+<h3 id=signature-help>Signature help</h3>
+<section data-markdown>
+<script type=text/template>
+- `:lua vim.lsp.buf.signature_help()` shows local signature help for common OpenFOAM
+    keywords
+    - [A limited number of keywords is supported currently]
+</script>
+</section>
+<section data-shortcode-section>
+<img style="width:90%;margin:8% 0 0;padding:0" data-src=images/signature_help.png>
+</section>
+</section><section>
+<h3 id=document-symbols>Document symbols</h3>
+<section data-markdown>
+<script type=text/template>
+- Having trouble navigating a huge dictionary?
+    - Try `:lua vim.lsp.buf.document_symbol()`
+- All key-value pairs and dictionaries in a file are indexed
+    - Including the ones which are **inside lists**
+    - Symbols have meaningful types (Key, Struct, Number ... etc) for easy filtering with fzf.
+</script>
+</section>
+<section data-markdown>
+<script type=text/template>
+- If you have multiple buffers open
+    - Try `:lua vim.lsp.buf.workspace_symbol()` for workspace-wide view of symbols
+    - Always takes you to the **value** of the selected symbol
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto;padding:0" data-autoplay src=videos/symbols.webm></video>
+</section>
+</section><section>
+<h3 id=diagnostics>Diagnostics</h3>
+<section data-markdown>
+<script type=text/template>
+- This is the **only** feature which requires **OpenFOAM to be sourced**
+  (solver from `system/controlDict` must be found on `PATH`)
+- Diagnostics are **workspace-wide**
+- `:lua vim.diagnostic.open_float()` on erronous lines shows the full error message
+- `:lua vim.diagnostic.setqflist()` opens the quick-fix list
+</script>
+</section>
+<section data-shortcode-section>
+<video style="display:block;width:85%;margin:100px auto;padding:0" data-autoplay src=videos/diagnostics.webm></video>
+</section>
+</section><section>
+<h2 id=next-steps>Next steps</h2>
+</section><section>
+<ul>
+<li>Better parsing performance
+<ul>
+<li>Eventually, switch to native node bindings (using WASM bindings for now).</li>
+<li>Goal: No waiting time for full-case workspace symbols.</li>
+</ul>
+</li>
+<li>Better server performance
+<ul>
+<li>Async-do everything</li>
+</ul>
+</li>
+</ul>
+</section>
+</div>
+</div>
+<script type=application/json id=reveal-hugo-site-params>{"custom_css":"css/customized.css","highlight_theme":"a11y-light","width":"1200"}</script>
+<script type=application/json id=reveal-hugo-page-params>null</script>
+<script src=/openfoam-with-neovim/reveal-js/reveal.js></script>
+<script type=text/javascript src=/openfoam-with-neovim/reveal-js/plugin/markdown/markdown.js></script>
+<script type=text/javascript src=/openfoam-with-neovim/reveal-js/plugin/highlight/highlight.js></script>
+<script type=text/javascript src=/openfoam-with-neovim/reveal-js/plugin/zoom/zoom.js></script>
+<script type=text/javascript src=/openfoam-with-neovim/reveal-js/plugin/notes/notes.js></script>
+<script type=text/javascript>var revealHugoDefaults,revealHugoSiteParams,revealHugoPageParams,options;function camelize(a){return a&&Object.keys(a).forEach(function(b){newK=b.replace(/(\_\w)/g,function(a){return a[1].toUpperCase()}),newK!=b&&(a[newK]=a[b],delete a[b])}),a}revealHugoDefaults={center:!0,controls:!0,history:!0,progress:!0,transition:"slide"},revealHugoSiteParams=JSON.parse(document.getElementById('reveal-hugo-site-params').innerHTML),revealHugoPageParams=JSON.parse(document.getElementById('reveal-hugo-page-params').innerHTML),options=Object.assign({plugins:[RevealZoom,RevealNotes,RevealMarkdown,RevealHighlight]},camelize(revealHugoDefaults),camelize(revealHugoSiteParams),camelize(revealHugoPageParams)),Reveal.initialize(options)</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+.reveal code {
+    font-size: 0.9em;
+    min-width: 80%;
+    font-family: 'Fira Code', monospace;
+}
+
+.reveal {
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.reveal p {
+  text-align: left;
+}
+
+.reveal ul {
+  display: block;
+}
+
+.reveal ol {
+  display: block;
+}
+
+.reveal li {
+  margin: 30px 0;
+}
+
+.reveal h1 {
+  background-color: rgba(31, 49, 81, 0.8);
+  padding: 20px;
+  color: white;
+}
+
+.reveal h2 {
+  background-color: green;
+  padding: 10px;
+  text-transform: none;
+  display: block;
+}
+
+.reveal h3 {
+  background-color: #0b5394;
+  padding: 10px;
+  text-transform: none;
+}
+
+.reveal h5 {
+  text-transform: none;
+}
+
+.col {
+    flex: 1;
+}
+
+.reveal .slides section div.tikz {
+    margin: 30pt;
+}
