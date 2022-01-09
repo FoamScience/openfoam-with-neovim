@@ -1,4 +1,4 @@
-# AMR-LB
+# OpenFOAM editing with NeoVIM
 
 > This is based on [Hugo-reveal](https://github.com/dzello/reveal-hugo),
 > so if anything works there, it works here
@@ -8,7 +8,7 @@
 
 To get things running:
 ```
-git clone --recurse-submodules https://github.com/FoamScience/amr-lb
-cd amr-lb
+git clone --recurse-submodules https://github.com/FoamScience/openfoam-with-neovim
+cd openfoam-with-neovim
 hugo server
 ```
